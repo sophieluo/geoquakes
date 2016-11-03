@@ -12,7 +12,7 @@ $(document).on("ready", function() {
   });
 
 function onSuccess(json) {
-    // console.log(json);
+     console.log(json);
   //   for (var i=0;i<json.features.length;i++) {
   //      var quakeTitle = json.features[i].properties.title;
   //      $("#info").append("<p>"+quakeTitle+"</p");
@@ -22,10 +22,32 @@ function onSuccess(json) {
    var quakeHtml = template({ earthquakes:json.features });
   //  console.log(quakeHtml)
     $("#earthquakes-list").append(quakeHtml);
-}
+
+    var map;
+    function initMap() {
+    //
+      map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 37.78, lng: -122.44},
+      zoom: 3
+        });
+      for (var i=0;i<json.features.length;i++) {
+        var latitude=json.features[i].geometry.coordinates[0]
+        var longitude=json.features[i].geometry.coordinates[1]
+        var marker = new google.maps.Marker({
+           position: { lat: latitude, lng: longitude},
+           map: map
+         });
+        }
+       marker.setMap(map);
+      }
+    initMap();
+  }
 
   function onError(xhr, status, errorThrown) {
       alert("Sorry, there was a problem!");
   }
+
+
+
 
 });
